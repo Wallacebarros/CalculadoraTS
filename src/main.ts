@@ -14,7 +14,8 @@ apagar.addEventListener("click", () => {
 })
 
 numeros.map(numero => numero.addEventListener("click", e => {
-
+    const btn = e.target as HTMLButtonElement
+    input.value += btn.textContent as string
 }))
 
 operadores.map(operador => operador.addEventListener("click", () => {
