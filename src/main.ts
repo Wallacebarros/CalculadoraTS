@@ -1,23 +1,55 @@
-const input = document.querySelector("#input") as HTMLInputElement
-const igualdade = document.querySelector("#igualdade") as HTMLButtonElement
-const apagar = document.querySelector("#apagar") as HTMLButtonElement
+import { Operador } from "./types";
 
-const numeros = [... document.querySelectorAll(".numeros")] as Array<HTMLButtonElement>
-const operadores = [... document.querySelectorAll(".operadores")] as Array<HTMLButtonElement>
+const numeros = document.querySelectorAll('.numeros');
+const operadores = document.querySelectorAll('.operadores');
+const igualdade = document.querySelector('#igualdade') as HTMLButtonElement;
+const limpar = document.querySelector('#resetar') as HTMLButtonElement;
+const apagar = document.querySelector('#apagar') as HTMLButtonElement;
+const input = document.querySelector('#input') as HTMLInputElement;
 
-igualdade.addEventListener("click", () => {
-    
-})
+const fatores: Array<number> = [];
+const operacoes: Array<Operador> = [];
 
-apagar.addEventListener("click", () => {
-    
-})
+numeros.forEach(numero => {
+  numero.addEventListener('click', () => {
+    input.value += numero.textContent;
+  });
+});
 
-numeros.map(numero => numero.addEventListener("click", e => {
-    const btn = e.target as HTMLButtonElement
-    input.value += btn.textContent as string
-}))
+operadores.forEach(operador => {
+  operador.addEventListener('click', () => {
+    fatores.push(Number(input.value));
+    operacoes.push(operador.textContent as Operador);
+    input.value = '';
+  });
+});
 
-operadores.map(operador => operador.addEventListener("click", () => {
-    
-}))
+igualdade.addEventListener('click', () => {
+    fatores.push(Number(input.value));
+    input.value = calcular().toString();
+    fatores.length = 0;
+    operacoes.length = 0;
+});
+
+limpar.addEventListener('click', () => {
+
+    input.value = '';
+    fatores.length = 0;
+    operacoes.length = 0;
+});
+
+function calcular() {
+    let resultado = fatores[0];
+    for (let i = 0; i < operacoes.length; i++) {
+        switch (operacoes[i]) {
+            case "+" : resultado += fatores[i + 1]; break;
+            case "-" : resultado -= fatores[i + 1]; break;
+            case "x" : resultado *= fatores[i + 1]; break;
+            case "/" : resultado /= fatores[i + 1]; break;
+        }
+    }
+    return resultado;
+}
+apagar.addEventListener('click', () => {
+    input.value = input.value.slice(0, -1);
+});
